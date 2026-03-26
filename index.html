@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Justice Calculator</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background: linear-gradient(180deg,#0f2027,#203a43,#2c5364);
+}
+
+.app {
+    max-width: 420px;
+    margin: auto;
+    padding: 15px;
+}
+
+.header {
+    text-align: center;
+    color: white;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.card {
+    background: rgba(255,255,255,0.08);
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+select, input {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    margin-top: 8px;
+    border-radius: 12px;
+    border: none;
+    font-size: 14px;
+    box-sizing: border-box;
+    background: rgba(255,255,255,0.12);
+    color: white;
+}
+
+input::placeholder {
+    color: rgba(255,255,255,0.6);
+}
+
+select option {
+    color: black;
+}
+
+select:focus, input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #00e676;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+}
+
+.add { background: #00e676; }
+.redbtn { background: #ff1744; }
+.orange { background: #ff9100; }
+
+.list-item {
+    background: rgba(255,255,255,0.1);
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 8px;
+}
+
+.result {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 15px;
+    text-align: center;
+    color: white;
+}
+
+.big {
+    font-size: 24px;
+    color: #00e676;
+}
+
+.total {
+    color: gold;
+    font-size: 20px;
+}
+
+.red { color: red; }
+.green { color: #00e676; }
+
+.modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.modal.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-box {
+    background: linear-gradient(145deg,#1f1f1f,#2a2a2a);
+    padding: 20px;
+    border-radius: 18px;
+    text-align: center;
+    color: white;
+    width: 80%;
+    max-width: 300px;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: all 0.25s ease;
+}
+
+.modal.show .modal-box {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.modal button {
+    background: #00e676;
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="header">⚖️ Justice Calculator</div>
+
+<div class="card">
+🧪 ของผิดกฎหมาย
+<select id="illegal">
+<option value="2000,10,ซีเมนต์">ซีเมนต์</option>
+<option value="3000,10,Capsule">Capsule</option>
+<option value="5000,10,Ghost">Ghost</option>
+</select>
+<input type="number" id="qty" placeholder="จำนวน">
+<button class="add" onclick="addIllegal()">เพิ่ม</button>
+</div>
+
+<div class="card">
+⚖️ คดีทั่วไป
+<select id="case">
+<option value="2000,10,หลบหนี">หลบหนี</option>
+<option value="2000,10,พื้นที่สุ่มเสียง">พื้นที่สุ่มเสียง</option>
+<option value="20000,15,ทะเลาะวิวาท">ทะเลาะวิวาท</option>
+<option value="5000,0,ใส่หน้ากาก">ใส่หน้ากาก</option>
+<option value="0,10,หลบหนีขึ้นเขาและลงน้ำ (X3)">หลบหนีขึ้นเขาและลงน้ำ (X3)</option>
+<option value="0,20,หลบหนีหลังจากจับกุม (X2)">หลบหนีหลังจากจับกุม (X2)</option>
+<option value="5000,10,หลบหนีออกนอกเมือง">หลบหนีออกนอกเมือง</option>
+<option value="10000,20,ทำลายหลักฐาน">ทำลายหลักฐาน</option>
+<option value="5000,10,ถืออาวุธในพื้นที่สาธารณะ">ถืออาวุธในพื้นที่สาธารณะ</option>
+<option value="5000,10,ไม่ให้ความร่วมมือแก่เจ้าหน้าที่">ไม่ให้ความร่วมมือแก่เจ้าหน้าที่</option>
+<option value="5000,20,แจ้งความเท็จ">แจ้งความเท็จ</option>
+<option value="5000,15,กระทำความผิดซึ่งหน้า">กระทำความผิดซึ่งหน้า</option>
+<option value="5000,20,ส่งของผิดกฎหมาย">ส่งของผิดกฎหมาย</option>
+</select>
+<button class="add" onclick="addCase()">เพิ่ม</button>
+</div>
+
+<div class="card">
+🚨 คดีแดง
+<select id="redcase">
+<option value="20000,30">ช่วยเหลือ / ขัดขวางการทำงานเจ้าหน้าที่</option>
+<option value="50000,30">หมิ่นประมาทเจ้าหน้าที่</option>
+<option value="30000,60">บุกรุกเรือนจำ</option>
+<option value="30000,60">แหกคุก (เรือนจำใหญ่)</option>
+<option value="25000,30">ทำร้ายร่างกายประชาชน</option>
+<option value="50000,60">ทำร้ายร่างกายหน่วยงาน</option>
+<option value="10000,30">ก่อกวน / สร้างความวุ่นวาย</option>
+<option value="20000,30">ข่มขู่ / กักขังหน่วงเหนี่ยว</option>
+<option value="50000,60">แอบอ้างเป็นหน่วยงาน</option>
+<option value="30000,30">ขโมยพาหนะประชาชน</option>
+<option value="50000,30">ขโมยพาหนะตำรวจ</option>
+<option value="30000,30">ฉ้อโกง</option>
+<option value="20000,30">หลีกเลี่ยงหมายเรียก</option>
+<option value="20000,30">ทำลายทรัพย์สินหน่วยงาน</option>
+<option value="30000,60">ฝ่าฝืนเคอร์ฟิว</option>
+<option value="100000,60">ก่อเหตุสถานีตำรวจ / โรงพยาบาล</option>
+<option value="50000,60">หลบหนีเข้าเรเบล</option>
+<option value="200000,100">FULLSYSTEM</option>
+</select>
+<button class="redbtn" onclick="addRed()">เพิ่มคดีแดง</button>
+</div>
+
+<div class="card">
+💰 เงินแดง
+<input type="number" id="money">
+<button class="add" onclick="addMoney()">เพิ่มเงินแดง</button>
+</div>
+
+<div class="card">
+<button class="orange" onclick="undo()">Undo</button>
+<button class="redbtn" onclick="resetAll()">Reset</button>
+</div>
+
+<div class="card">
+📜 รายการ
+<div id="list"></div>
+</div>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <div>เงินแดงต่ำกว่า 500 ยึดอย่างเดียว</div>
+    <button onclick="closeModal()">ปิด</button>
+  </div>
+</div>
+
+<script>
+let cases = [];
+let lastIllegalFine = 0;
+
+const illegal = document.getElementById("illegal");
+const caseSelect = document.getElementById("case");
+const redcase = document.getElementById("redcase");
+const qty = document.getElementById("qty");
+const money = document.getElementById("money");
+const list = document.getElementById("list");
+const result = document.getElementById("result");
+
+function openModal(){ document.getElementById("modal").classList.add("show"); }
+function closeModal(){ 
+    document.getElementById("modal").classList.remove("show"); 
+    money.value=""; 
+}
+
+document.getElementById("modal").addEventListener("click", function(e){
+    if(e.target.id === "modal") closeModal();
+});
+
+function addIllegal(){
+    let v = illegal.value.split(",");
+    let quantity = parseInt(qty.value) || 1;
+    let fine = parseInt(v[0]) * quantity;
+    lastIllegalFine = parseInt(v[0]);
+
+    cases.push({
+        name: v[2],
+        qty: quantity,
+        fine: fine,
+        jail: parseInt(v[1]) * quantity,
+        red: false
+    });
+    qty.value="";
+    calculate();
+}
+
+function addCase(){
+    let v = caseSelect.value.split(",");
+    let fine, jail;
+    let multiplier = 1;
+
+    if(v[2].includes("(X3)")){
+        multiplier = 3;
+    } else if(v[2].includes("(X2)")){
+        multiplier = 2;
+    }
+
+    // ถ้าเป็น X3 หรือ X2 ต้องมีของผิดกฎหมายก่อน
+    if(multiplier > 1){
+        if(lastIllegalFine === 0){
+            alert("กรุณาเพิ่มของผิดกฎหมายก่อนคำนวณคดีนี้!");
+            return;
+        }
+        // fine = lastIllegalFine * quantity ของของผิดกฎหมาย * multiplier
+        let totalQty = cases.reduce((sum, c) => sum + (c.name === illegal.options[illegal.selectedIndex].text ? c.qty : 0), 0);
+        if(totalQty === 0) totalQty = 1; // กันกรณีไม่เจอชื่อของผิดกฎหมาย
+        fine = lastIllegalFine * totalQty * multiplier;
+        jail = parseInt(v[1]);
+    } else {
+        fine = parseInt(v[0]);
+        jail = parseInt(v[1]);
+    }
+
+    cases.push({
+        name: v[2],
+        qty: 1,
+        fine: fine,
+        jail: jail,
+        red: false
+    });
+
+    calculate();
+}
+
+function addMoney(){
+    let m = parseInt(money.value) || 0;
+    if(m < 500){ openModal(); return; }
+
+    cases.push({ name:"💰 เงินแดง", qty:m, fine:m*5, jail:15, red:false });
+    money.value="";
+    calculate();
+}
+
+function undo(){ cases.pop(); calculate(); }
+
+function resetAll(){
+    cases=[];
+    qty.value="";
+    money.value="";
+    calculate();
+}
+
+function calculate(){
+    let fine=0, jail=0, hasRed=false, redCount=0, html="";
+
+    cases.forEach(c=>{
+        fine+=c.fine;
+        jail+=c.jail;
+        if(c.red){ hasRed=true; redCount++; }
+        html+=`<div class="list-item">${c.name} x${c.qty}</div>`;
+    });
+
+    list.innerHTML = html || "ไม่มีรายการ";
+
+    let text = `<div class="big">฿ ${fine.toLocaleString()}</div>
+    <div>⏱ ${jail} นาที</div>`;
+
+    if(hasRed){
+        text += `<div class="red">🚨 คดีแดง ${redCount} คดี → ประกันไม่ได้</div>`;
+    } 
+    else if(jail>5){
+        let bail=(jail-5)*300;
+        text += `<div>💵 ประกัน ${bail.toLocaleString()}</div>
+        <div class="total">💸 ${(fine+bail).toLocaleString()} <span class="green">⏳ 5 นาที</span></div>`;
+    }
+
+    result.innerHTML=text;
+}
+</script>
+
+</body>
+</html>
